@@ -5,8 +5,9 @@ import os
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
+torch.serialization.add_safe_globals({"numpy": np})
 # 讀取原始權重
-model_data = torch.load(script_dir+'/c3d-pretrained.pth', weights_only=True)
+model_data = torch.load(script_dir+'/c3d-pretrained.pth')
 
 
 # 開啟txt檔案來寫入
@@ -23,6 +24,7 @@ with open('model_random.txt', 'w', encoding='utf-8') as f:
             
             # 轉換回tensor並更新
             model_data[name] = torch.FloatTensor(random_weights)
+            np.set_printoptions(threshold=np.inf)
             
             # 寫入txt
             f.write(f"\nlayer: {name}\n")
